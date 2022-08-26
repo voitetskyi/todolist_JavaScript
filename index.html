@@ -17,11 +17,23 @@
             background-color: rgba(247, 247, 250, 0.5);
         }
         #sidebar {
-            width: 150px;
+            width: 200px;
             padding-bottom: 100%;
             float: left;
             background-color: white;
             /* border: 6px dotted chartreuse; */
+        }
+        #lists {
+            margin-top: 20px;
+            margin-left: 20px;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .side_list:hover {
+            background-color: #EEF3FE;
+        }
+        .side_list {
+            margin-bottom: 10px;
         }
         #login {
             position: absolute;
@@ -29,7 +41,7 @@
         }
         #container {
             padding-top: 20px;
-            margin-left: 250px;
+            margin-left: 300px;
             margin-right: 10%;
             /* border: 6px dotted chartreuse; */
         }
@@ -59,6 +71,20 @@
             margin-left: 23px;
             /* border: 6px dotted chartreuse; */
         }
+        h5 {
+            position: absolute;
+            width: 155px;
+            height: 19px;
+            left: 50%;
+            margin-left: -75px;
+            top: 16px;
+            margin-top: 0px;
+            font-weight: 500;
+            font-size: 16px;
+        }
+        h6 {
+            margin: 8px 0px 8px 0px;
+        }
         .task {
             margin-bottom: 20px;
             box-sizing: border-box;
@@ -82,6 +108,9 @@
         input {
             margin-right: 8px;
         }
+        .closeAddTaskForm:hover {
+            background-color: lightgrey;
+        }
         .trash:hover {
             background-color: lightgrey;
         }
@@ -91,127 +120,84 @@
         .show-done .done {
             display: block;
         }
+        #addTaskForm {
+            width: 480px;
+            height: 400px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -240px;
+            margin-top: -200px;
+
+            background: #FFFFFF;
+            border: 1px solid #E3ECF3;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            border-radius: 5px;
+        }
+        .hr_form {
+            position: absolute;
+            height: 0px;
+            left: 24px;
+            right: 24px;
+            top: 51px;
+            border: 1px solid #E8EFF6;
+        }
+        form {
+            position: absolute;
+            width: 432px;
+            left: 24px;
+            top: 59px;
+            /* border: 6px dotted chartreuse; */
+        }
+        #task_name {
+            width: 424px;
+        }
+        .hide_form {
+            display: none;
+        }
+        button {
+            width:136px;
+            background: #5C86F2;
+            border-radius: 4px;
+            color: #FFFFFF;
+            font-weight: 700;
+            font-size: 14px;
+
+        }
     </style>
 </head>
 <body>
     <div id='sidebar'>
-        <div>Мої дошки</div>
-        <div>
+        <h2 style="margin: 20px;">Мої списки завдань</h2>
+        <div id="lists"></div>
+        <button style="margin: 20px;" onclick="closeAddTaskForm()">Додати завдання</button>
+        <button style="margin: 20px;">Додати список</button>
+        <div style="margin: 20px;">
             <input type="checkbox" checked onclick="show_done_tasks()">
             <label>Приховувати виконані завдання</label>
         </div>
-        
-        <div id="login"> Іван Ванко</div>
+        <div id="login">Іван Ванко</div>
+    </div>
+    <div class="hide_form" id="addTaskForm" name="addTaskForm">
+        <h5>Додати нову задачу</h5>
+        <hr class="hr_form">
+        <img class="closeAddTaskForm" style="padding:12px" align="right" title="Закрити" src="icons/cross.png" onclick="closeAddTaskForm()">
+        <form id="add_task_form" name="task">
+            <h6>Введіть заголовок завдання *</h6>
+            <input type="text" id="task_name" name="taskname" placeholder="Заголовок завдання" required>
+            <h6>Додайте опис завдання</h6>
+            <textarea rows="10" cols="52" name="textarea" placeholder="Опис завдання"></textarea>
+            <h6>Встановіть дедлайн<input type="date" id="start" name="duedate" style="margin-left: 50px;"></h6>
+            <h6>Оберіть список завдань<select id="select" name="select" form="add_task_form" style="margin-left: 30px;"><option></option></select></h6>
+            <button type="submit">Додати завдання</button>
+        </form>
+
     </div>
     <div id="container">
         <h1>Поточні завдання</h1>  <!-- <img src="icons/burger.png" style="padding-right: 6px; padding-bottom: 6px;"> -->
         <!-- <p id="subh1">Загальна дошка в системі, що містить поточні завдання для всіх контракторів</p> -->
         
     </div>
-    <script>
-        class Tasks {
-            constructor(done, name, description, duedate, list_name, id) {
-                this.done = done
-                this.name = name
-                this.description = description
-                this.duedate = new Date(duedate)
-                this.list_name = list_name
-                this.id = id
-            }
-        }
-        let tasks = [
-            new Tasks(false, 'Пройти опитування', 'Пройти опитування', '2022-09-09', 'Тренінг з безпеки', 1),
-            new Tasks(true, 'Реєстрація на TechTalk', 'Зареєструватись на TechTalk, який пройде 25.08.22 о 09:00. Поговоримо про багаторічну традицію нашої компанії — шаринг знань та традиційний івент з багаторічною історією.', '2022-09-09', 'Івенти', 2),
-            new Tasks(false, 'Реєстрація на MeetUp', 'Зареєструватись на MeetUp, який пройде 22.09.22 о 18:00', '2022-08-23', 'Івенти', 3),
-            new Tasks(false, 'Пройти опитування', 'Пройти опитування', '2022-09-09', 'Test', 4),
-            new Tasks(true, 'Реєстрація на TechTalk', 'Зареєструватись на TechTalk, який пройде 25.08.22 о 09:00.', '2022-09-09', 'Test', 5),
-            new Tasks(false, 'Реєстрація на MeetUp', 'Зареєструватись на MeetUp, який пройде 22.09.22 о 18:00', '2022-08-23', 'Test', 6)
-
-        ]
-        let today = new Date
-
-        const listsElement = document.getElementById('container')
-
-        function appendList(task) {
-            let {done, name, description, duedate, list_name, id} = task
-            let check = document.getElementsByName(list_name)
-            if (check.length === 0) {
-                listsElement.innerHTML += `<div class="tasks_list" name="${list_name}" id="${list_name.replace(/[.,\/#!$%\^&\*;:{}=\-_ `~()]/g,"")}"><h2>${list_name}</h2></div>`
-            }
-        }
-        function appendTask(task) {
-            let {done, name, description, duedate, list_name, id} = task
-            const tasksElement = document.getElementById(list_name.replace(/[.,\/#!$%\^&\*;:{}=\-_ `~()]/g,""))
-            let hr_color = ''
-            if (done) {
-                hr_color = '#58AC83'
-            } else if (today > duedate && done === false) {
-                hr_color = '#E63241'
-            } else {
-                hr_color = '#D9D9D9'
-            }
-            let h4_color =''
-            if (today > duedate && done === false) {
-                h4_color = '#E63241'
-            } else {
-                h4_color = '#878787'
-            }
-            let checked = ''
-            let status = 'undone'
-            if (done) {
-                checked = 'checked'
-                status = 'done'
-            }
-            duedate = duedate.toLocaleDateString()
-            tasksElement.innerHTML += `<div class="task ${status}" id="${id}">
-                    <hr color="${hr_color}">
-                    <img class="trash" align="right" title="Видалити завдання"src="icons/trash21.png" onclick="deleteTask(${id})">
-                    <h4 style="color:${h4_color}"><svg  width="14" height="14" style="padding-right: 8px; padding-bottom: 0px;" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke="currentColor" d="M10.4998 2.33325H3.49984C2.21117 2.33325 1.1665 3.37792 1.1665 4.66659V10.4999C1.1665 11.7886 2.21117 12.8333 3.49984 12.8333H10.4998C11.7885 12.8333 12.8332 11.7886 12.8332 10.4999V4.66659C12.8332 3.37792 11.7885 2.33325 10.4998 2.33325Z" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path stroke="currentColor" d="M4.6665 1.16663V3.49996M9.33317 1.16663V3.49996M1.1665 5.83329H12.8332" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>${duedate}
-                    </h4>
-                    <h3><input type="checkbox" ${checked} onclick="changeDone(${id})">${name}</h3>
-                    <p>${description}</p>
-                </div>`
-        }
-
-        function deleteTask (id) {
-            let task = document.getElementById(id.toString())
-            task.remove()
-            // let i = 0
-            // let arr = []
-            // for (item of tasks) {
-            //     if (item.id === id) {
-            //         console.log('remove: ', id);
-            //     } else {arr.push(item)}
-            //     i++
-            // }
-            // tasks = arr
-        }
-
-        function changeDone (id) {
-            let i = 0
-            for (item of tasks) {
-                if (item.id === id) {
-                    console.log('checkbox changed: ', id);
-                    item.done = !item.done
-                    deleteTask(id)
-                    appendTask(item)
-                }
-                i++
-            }
-        }
-
-        function show_done_tasks () {
-            const cont = document.querySelector("#container")
-            const classes = cont.classList
-            const result = classes.toggle("show-done")
-        }
-        
-        tasks.forEach(appendList)
-        tasks.forEach(appendTask)
-    
-    </script>
+    <script type="text/javascript" src="script.js"></script>
 </body>
 </html>
