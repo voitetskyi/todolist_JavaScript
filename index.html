@@ -12,8 +12,9 @@
             src: url('fonts/Roboto-Regular.ttf');
         }
         body {
+            margin: 0px;
             font-family: Roboto;
-            background-color: rgb(245, 238, 238);
+            background-color: rgba(247, 247, 250, 0.5);
         }
         #sidebar {
             width: 150px;
@@ -50,13 +51,13 @@
         h3 {
             font-weight: 700;
             font-size: 14px;
-            margin-left: 19px;
+            margin-left: 20px;
         }
         h4 {
             font-weight: 400;
             font-size: 14px;
-            margin-left: 22px;
-            color: #E63241;
+            margin-left: 23px;
+            /* border: 6px dotted chartreuse; */
         }
         .task {
             margin-bottom: 20px;
@@ -75,118 +76,142 @@
             font-weight: 400;
             font-size: 12px;
             line-height: 14px;
-            margin-left: 40px;
+            margin-left: 45px;
             margin-right: 20px;
+        }
+        input {
+            margin-right: 8px;
+        }
+        .trash:hover {
+            background-color: lightgrey;
+        }
+        .done {
+            display: none;
+        }
+        .show-done .done {
+            display: block;
         }
     </style>
 </head>
 <body>
     <div id='sidebar'>
         <div>Мої дошки</div>
+        <div>
+            <input type="checkbox" checked onclick="show_done_tasks()">
+            <label>Приховувати виконані завдання</label>
+        </div>
+        
         <div id="login"> Іван Ванко</div>
     </div>
     <div id="container">
-        <h1><img src="icons/burger.png" style="padding-right: 6px; padding-bottom: 6px;">Поточні завдання</h1>
-        <p id="subh1">Загальна дошка в системі, що містить поточні завдання для всіх контракторів</p>
-        <div class="tasks_list">
-            <h2>Тренінг з безпеки</h2>
-            <div class="task">
-                <hr color="#E63241">
-                <h4><svg  width="14" height="14" style="padding-right: 6px;" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke="currentColor" d="M10.4998 2.33325H3.49984C2.21117 2.33325 1.1665 3.37792 1.1665 4.66659V10.4999C1.1665 11.7886 2.21117 12.8333 3.49984 12.8333H10.4998C11.7885 12.8333 12.8332 11.7886 12.8332 10.4999V4.66659C12.8332 3.37792 11.7885 2.33325 10.4998 2.33325Z" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path stroke="currentColor" d="M4.6665 1.16663V3.49996M9.33317 1.16663V3.49996M1.1665 5.83329H12.8332" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>18.08.22</h4>
-                <!-- <input type="date" id="start" name="trip-start" value="2022-08-24"> -->
-                <h3><input type="checkbox" class="check_done">Пройти опитування</h3>
-                <p>
-                    Зареєструватись на TechTalk, який пройде 25.08.22 о 09:00. Поговоримо
-                    про багаторічну традицію нашої компанії — шаринг знань та традиційний
-                    івент з багаторічною історією — InterLink Tech Talk. За традицією,
-                    останній івент теплого сезону ми проводимо на свіжому повітрі, у
-                    форматі Open Air з пікніком та спілкуванням з колегами. Ділимося з
-                    вами коротким оглядом презентацій від наших спікерів, світлинами та
-                    атмосферою. Підготовка, саунд чек, посадочні місця — і наша офісна
-                    зона відпочинку готова зустрічати гостей. Почали ми наш Knowledge... 
-                </p>
-            </div>
-        </div>
-        <div class="tasks_list">
-            <h2>Івенти</h2>
-            <div class="task">
-                <hr color="#58AC83">
-                <h4><svg  width="14" height="14" style="padding-right: 6px;" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke="currentColor" d="M10.4998 2.33325H3.49984C2.21117 2.33325 1.1665 3.37792 1.1665 4.66659V10.4999C1.1665 11.7886 2.21117 12.8333 3.49984 12.8333H10.4998C11.7885 12.8333 12.8332 11.7886 12.8332 10.4999V4.66659C12.8332 3.37792 11.7885 2.33325 10.4998 2.33325Z" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path stroke="currentColor" d="M4.6665 1.16663V3.49996M9.33317 1.16663V3.49996M1.1665 5.83329H12.8332" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>18.08.22</h4>
-                <!-- <input type="date" id="start" name="trip-start" value="2022-08-24"> -->
-                <h3><input type="checkbox" class="check_done">Пройти опитування</h3>
-                <p>
-                    Зареєструватись на TechTalk, який пройде 25.08.22 о 09:00. Поговоримо
-                    про багаторічну традицію нашої компанії — шаринг знань та традиційний
-                    івент з багаторічною історією — InterLink Tech Talk. За традицією,
-                    останній івент теплого сезону ми проводимо на свіжому повітрі, у
-                    форматі Open Air з пікніком та спілкуванням з колегами. Ділимося з
-                    вами коротким оглядом презентацій від наших спікерів, світлинами та
-                    атмосферою. Підготовка, саунд чек, посадочні місця — і наша офісна
-                    зона відпочинку готова зустрічати гостей. Почали ми наш Knowledge... 
-                </p>
-            </div>
-            <div class="task">
-                <hr color="#D9D9D9">
-                <h4><svg  width="14" height="14" style="padding-right: 6px;" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke="currentColor" d="M10.4998 2.33325H3.49984C2.21117 2.33325 1.1665 3.37792 1.1665 4.66659V10.4999C1.1665 11.7886 2.21117 12.8333 3.49984 12.8333H10.4998C11.7885 12.8333 12.8332 11.7886 12.8332 10.4999V4.66659C12.8332 3.37792 11.7885 2.33325 10.4998 2.33325Z" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path stroke="currentColor" d="M4.6665 1.16663V3.49996M9.33317 1.16663V3.49996M1.1665 5.83329H12.8332" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>18.08.22</h4>
-                <!-- <input type="date" id="start" name="trip-start" value="2022-08-24"> -->
-                <h3><input type="checkbox" class="check_done">Пройти опитування</h3>
-                <p>
-                    Зареєструватись на TechTalk, який пройде 25.08.22 о 09:00. Поговоримо
-                    про багаторічну традицію нашої компанії — шаринг знань та традиційний
-                    івент з багаторічною історією — InterLink Tech Talk. За традицією,
-                    останній івент теплого сезону ми проводимо на свіжому повітрі, у
-                    форматі Open Air з пікніком та спілкуванням з колегами. Ділимося з
-                    вами коротким оглядом презентацій від наших спікерів, світлинами та
-                    атмосферою. Підготовка, саунд чек, посадочні місця — і наша офісна
-                    зона відпочинку готова зустрічати гостей. Почали ми наш Knowledge... 
-                </p>
-            </div>
-        </div>
-        <div class="tasks_list" id="Test">
-            <h2>Test</h2>
-        </div>
+        <h1>Поточні завдання</h1>  <!-- <img src="icons/burger.png" style="padding-right: 6px; padding-bottom: 6px;"> -->
+        <!-- <p id="subh1">Загальна дошка в системі, що містить поточні завдання для всіх контракторів</p> -->
+        
     </div>
     <script>
         class Tasks {
-            constructor(done, name, description, duedate, list_id, id) {
+            constructor(done, name, description, duedate, list_name, id) {
                 this.done = done
                 this.name = name
                 this.description = description
                 this.duedate = new Date(duedate)
-                this.list_id = list_id
+                this.list_name = list_name
                 this.id = id
             }
         }
         let tasks = [
-            new Tasks(false, 'Пройти опитування', 'Пройти опитування', '2022-09-09', 'Test', 1),
-            new Tasks(true, 'Реєстрація на TechTalk', 'Зареєструватись на TechTalk, який пройде 25.08.22 о 09:00. Поговоримо про багаторічну традицію нашої компанії — шаринг знань та традиційний івент з багаторічною історією — InterLink Tech Talk.', '2022-09-09', 'Test', 2),
-            new Tasks(false, 'Реєстрація на MeetUp', 'Зареєструватись на MeetUp, який пройде 22.09.22 о 18:00', '2022-08-23', 'Test', 3)
+            new Tasks(false, 'Пройти опитування', 'Пройти опитування', '2022-09-09', 'Тренінг з безпеки', 1),
+            new Tasks(true, 'Реєстрація на TechTalk', 'Зареєструватись на TechTalk, який пройде 25.08.22 о 09:00. Поговоримо про багаторічну традицію нашої компанії — шаринг знань та традиційний івент з багаторічною історією.', '2022-09-09', 'Івенти', 2),
+            new Tasks(false, 'Реєстрація на MeetUp', 'Зареєструватись на MeetUp, який пройде 22.09.22 о 18:00', '2022-08-23', 'Івенти', 3),
+            new Tasks(false, 'Пройти опитування', 'Пройти опитування', '2022-09-09', 'Test', 4),
+            new Tasks(true, 'Реєстрація на TechTalk', 'Зареєструватись на TechTalk, який пройде 25.08.22 о 09:00.', '2022-09-09', 'Test', 5),
+            new Tasks(false, 'Реєстрація на MeetUp', 'Зареєструватись на MeetUp, який пройде 22.09.22 о 18:00', '2022-08-23', 'Test', 6)
+
         ]
+        let today = new Date
 
-        const tasksElement = document.getElementById('Test')
-        function appendTask(task) {
-            const {done, name, description, duedate, list_id, id} = task
-            tasksElement.innerHTML += `<div class="task">
-                <hr color="#D9D9D9">
-                <h4><svg  width="14" height="14" style="padding-right: 6px;" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke="currentColor" d="M10.4998 2.33325H3.49984C2.21117 2.33325 1.1665 3.37792 1.1665 4.66659V10.4999C1.1665 11.7886 2.21117 12.8333 3.49984 12.8333H10.4998C11.7885 12.8333 12.8332 11.7886 12.8332 10.4999V4.66659C12.8332 3.37792 11.7885 2.33325 10.4998 2.33325Z" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path stroke="currentColor" d="M4.6665 1.16663V3.49996M9.33317 1.16663V3.49996M1.1665 5.83329H12.8332" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>${duedate}</h4>
-                <h3><input type="checkbox" class="check_done">${name}</h3>
-                <p>${description}</p>
-            </div>`
+        const listsElement = document.getElementById('container')
+
+        function appendList(task) {
+            let {done, name, description, duedate, list_name, id} = task
+            let check = document.getElementsByName(list_name)
+            if (check.length === 0) {
+                listsElement.innerHTML += `<div class="tasks_list" name="${list_name}" id="${list_name.replace(/[.,\/#!$%\^&\*;:{}=\-_ `~()]/g,"")}"><h2>${list_name}</h2></div>`
+            }
         }
-        tasks.forEach(appendTask);
+        function appendTask(task) {
+            let {done, name, description, duedate, list_name, id} = task
+            const tasksElement = document.getElementById(list_name.replace(/[.,\/#!$%\^&\*;:{}=\-_ `~()]/g,""))
+            let hr_color = ''
+            if (done) {
+                hr_color = '#58AC83'
+            } else if (today > duedate && done === false) {
+                hr_color = '#E63241'
+            } else {
+                hr_color = '#D9D9D9'
+            }
+            let h4_color =''
+            if (today > duedate && done === false) {
+                h4_color = '#E63241'
+            } else {
+                h4_color = '#878787'
+            }
+            let checked = ''
+            let status = 'undone'
+            if (done) {
+                checked = 'checked'
+                status = 'done'
+            }
+            duedate = duedate.toLocaleDateString()
+            tasksElement.innerHTML += `<div class="task ${status}" id="${id}">
+                    <hr color="${hr_color}">
+                    <img class="trash" align="right" title="Видалити завдання"src="icons/trash21.png" onclick="deleteTask(${id})">
+                    <h4 style="color:${h4_color}"><svg  width="14" height="14" style="padding-right: 8px; padding-bottom: 0px;" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke="currentColor" d="M10.4998 2.33325H3.49984C2.21117 2.33325 1.1665 3.37792 1.1665 4.66659V10.4999C1.1665 11.7886 2.21117 12.8333 3.49984 12.8333H10.4998C11.7885 12.8333 12.8332 11.7886 12.8332 10.4999V4.66659C12.8332 3.37792 11.7885 2.33325 10.4998 2.33325Z" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path stroke="currentColor" d="M4.6665 1.16663V3.49996M9.33317 1.16663V3.49996M1.1665 5.83329H12.8332" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>${duedate}
+                    </h4>
+                    <h3><input type="checkbox" ${checked} onclick="changeDone(${id})">${name}</h3>
+                    <p>${description}</p>
+                </div>`
+        }
 
+        function deleteTask (id) {
+            let task = document.getElementById(id.toString())
+            task.remove()
+            // let i = 0
+            // let arr = []
+            // for (item of tasks) {
+            //     if (item.id === id) {
+            //         console.log('remove: ', id);
+            //     } else {arr.push(item)}
+            //     i++
+            // }
+            // tasks = arr
+        }
+
+        function changeDone (id) {
+            let i = 0
+            for (item of tasks) {
+                if (item.id === id) {
+                    console.log('checkbox changed: ', id);
+                    item.done = !item.done
+                    deleteTask(id)
+                    appendTask(item)
+                }
+                i++
+            }
+        }
+
+        function show_done_tasks () {
+            const cont = document.querySelector("#container")
+            const classes = cont.classList
+            const result = classes.toggle("show-done")
+        }
+        
+        tasks.forEach(appendList)
+        tasks.forEach(appendTask)
+    
     </script>
 </body>
 </html>
