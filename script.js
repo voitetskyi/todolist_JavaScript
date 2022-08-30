@@ -1,27 +1,14 @@
-class Tasks {
-    constructor(done, name, description, duedate, list_name, id) {
+class Task  {
+    constructor (done, name, description, duedate, list_id, id) {
         this.done = done
         this.name = name
         this.description = description
-        this.duedate = new Date(duedate)
-        this.list_name = list_name
+        this.duedate = duedate
+        this.list_id = list_id
         this.id = id
     }
 }
-let tasks = [
-    new Tasks(false, 'Пройти опитування', 'Пройти опитування', '2022-09-09', 'Тренінг з безпеки', 1),
-    new Tasks(true, 'Реєстрація на TechTalk', 'Зареєструватись на TechTalk, який пройде 25.08.22 о 09:00. Поговоримо про багаторічну традицію нашої компанії — шаринг знань та традиційний івент з багаторічною історією.', '2022-09-09', 'Івенти', 2),
-    new Tasks(false, 'Реєстрація на MeetUp', 'Зареєструватись на MeetUp, який пройде 22.09.22 о 18:00', '2022-08-23', 'Івенти', 3),
-    new Tasks(false, 'Пройти опитування', 'Пройти опитування', '2022-09-09', 'Test', 4),
-    new Tasks(true, 'Реєстрація на TechTalk', 'Зареєструватись на TechTalk, який пройде 25.08.22 о 09:00.', '2022-09-09', 'Test', 5),
-    new Tasks(false, 'Реєстрація на MeetUp', 'Зареєструватись на MeetUp, який пройде 22.09.22 о 18:00', '2022-08-23', 'Test', 6)
 
-]
-let lists = [
-    {id: 1, name: 'Тренінг з безпеки'},
-    {id: 2, name: 'Івенти'},
-    {id: 3, name: 'Test'}
-]
 let today = new Date
 
 const listsElement = document.getElementById('container')
@@ -30,34 +17,33 @@ const cont = document.querySelector("#container")
 const select = document.getElementById('select')
 const addTaskFormElement = document.getElementById('addTaskForm')
 
-function appendListToBar (list) {
-    let {id, name} = list
-    listsBar.innerHTML += `<div class="side_list" id="list_${id}">${name}</div>`
+let lists_map = new Map()
+lists_map.set('Завдання без списку', 0)
+
+function appendList(list) {
+    let {name, id} = list
+    listsElement.innerHTML += `<div class="tasks_list" id="${id + 'list_id'}"><h2>${name}</h2></div>`
+    listsBar.innerHTML += `<div class="side_list" id="side_list${id}">${name}</div>`
     select.innerHTML += `<option>${name}</option>`
+    lists_map.set(name, id)
 }
 
-function appendList(task) {
-    let {done, name, description, duedate, list_name, id} = task
-    let check = document.getElementsByName(list_name)
-    if (check.length === 0) {
-        listsElement.innerHTML += `<div class="tasks_list" name="${list_name}" id="${list_name.replace(/[.,\/#!$%\^&\*;:{}=\-_ `~()]/g,"")}"><h2>${list_name}</h2></div>`
-    }
-}
 function appendTask(task) {
-    let {done, name, description, duedate, list_name, id} = task
-    console.log(done, name, description, duedate, list_name, id)
-    const tasksElement = document.getElementById(list_name.replace(/[.,\/#!$%\^&\*;:{}=\-_ `~()]/g,""))
-    console.log(tasksElement)
+    // console.log(task)
+    let {done, name, description, duedate, list_id, id} = task
+    console.log(done, name, description, duedate, list_id, id)
+    const tasksElement = document.getElementById((list_id !== null ? list_id : 0) + 'list_id')
+    // console.log(tasksElement)
     let hr_color = ''
     if (done) {
         hr_color = '#58AC83'
-    } else if (today > duedate && done === false) {
+    } else if (today > duedate && done === false && duedate !== null) {
         hr_color = '#E63241'
     } else {
         hr_color = '#D9D9D9'
     }
     let h4_color =''
-    if (today > duedate && done === false) {
+    if (today > duedate && done === false && duedate !== null) {
         h4_color = '#E63241'
     } else {
         h4_color = '#878787'
@@ -68,7 +54,9 @@ function appendTask(task) {
         checked = 'checked'
         status = 'done'
     }
-    duedate = duedate.toLocaleDateString()
+    if (duedate === null) {
+        duedate = ''
+    } else duedate = new Date(duedate).toLocaleDateString()
     tasksElement.innerHTML += `<div class="task ${status}" id="${id}">
             <hr color="${hr_color}">
             <img class="trash" align="right" title="Видалити завдання"src="icons/trash21.png" onclick="deleteTask(${id})">
@@ -82,31 +70,23 @@ function appendTask(task) {
         </div>`
 }
 
-function deleteTask (id) {
-    let task = document.getElementById(id.toString())
-    task.remove()
-    let i = 0
-    let arr = []
-    for (item of tasks) {
-        if (item.id === id) {
-            console.log('remove: ', id);
-        } else {arr.push(item)}
-        i++
-    }
-    tasks = arr
-}
+// function deleteTask (id) {
+//     let task = document.getElementById(id.toString())
+//     task.remove()
+//     let arr = []
+//     for (item of tasks) {
+//         if (item.id === id) {
+//             console.log('remove: ', id);
+//         } else {arr.push(item)}
+//     }
+//     tasks = arr
+// }
 
 function changeDone (id) {
-    let i = 0
-    for (item of tasks) {
-        if (item.id === id) {
-            console.log('checkbox changed: ', id);
-            item.done = !item.done
-            deleteTask(id)
-            appendTask(item)
-        }
-        i++
-    }
+    let status = false
+    if (document.getElementById(id.toString()).className === 'task undone') status = true
+    const task = new Task(status, undefined, undefined, undefined, undefined, id)
+    updateTask(id, task)
 }
 
 function show_done_tasks () {
@@ -120,20 +100,79 @@ function closeAddTaskForm () {
     taskForm.reset()
 }
 
-
-
 taskForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(taskForm);
     const obj = Object.fromEntries(formData.entries())
-    let id = tasks.length + 1
-    const task = new Tasks(false, obj.taskname, obj.textarea, obj.duedate, obj.select, id);
-    tasks.push(task)
-    appendTask(task)
-    closeAddTaskForm()
-    taskForm.reset()
-}) 
+    console.log(obj);
+    // console.log(lists_map);
+    // console.log(lists_map.get(obj.select))
+    const task = new Task(false, obj.taskname, obj.textarea, (obj.duedate !== '' ? obj.duedate : undefined), (lists_map.get(obj.select) !== 0 ? lists_map.get(obj.select) : undefined))
+    // console.log(task);
+    createTask(task)
+    .then(closeAddTaskForm())
+})
 
-lists.forEach(appendListToBar)
-tasks.forEach(appendList)
-tasks.forEach(appendTask)
+const taskEndpoint = 'http://localhost:8080/api/task'
+
+function createTask(task) {
+    return fetch(taskEndpoint, {
+        method: 'POST', 
+        headers:  {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(task)
+    })
+    .then(response => response.json())
+    .then(task => {
+        console.log(task[0])
+        appendTask(task[0])
+    })
+}
+
+function updateTask(id, task) {
+    return fetch(taskEndpoint + '/' + id, {
+        method: 'PATCH', 
+        headers:  {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(task)
+    })
+    .then(response => response.json())
+    .then(task => {
+        document.getElementById(id.toString()).remove()
+        console.log(task[0])
+        appendTask(task[0])
+    })
+}
+
+function deleteTask(id) {
+    return fetch(taskEndpoint + '/' + id, {
+        method: 'DELETE'
+        // headers:  {
+        //     'Content-Type': 'application/json'
+        // },
+        // body: JSON.stringify(task)
+    })
+    .then(response => response.json())
+    .then(task => {
+        document.getElementById(id.toString()).remove()
+        // console.log(task[0])
+    })
+}
+
+const listsEndpoint = 'http://localhost:8080/api/lists'
+
+fetch(listsEndpoint)
+    .then(response => response.json())
+    .then(tasks => {
+        tasks.forEach(appendList)
+    })
+
+const tasksEndpoint = 'http://localhost:8080/api/tasks'
+
+fetch(tasksEndpoint)
+    .then(response => response.json())
+    .then(tasks => {
+        tasks.forEach(appendTask)
+    })
