@@ -16,34 +16,37 @@ const listsBar = document.getElementById('lists')
 const cont = document.querySelector("#container")
 const select = document.getElementById('select')
 const addTaskFormElement = document.getElementById('addTaskForm')
+const addListFormElement = document.getElementById('addListForm')
 
 let lists_map = new Map()
 lists_map.set('Завдання без списку', 0)
 
 function appendList(list) {
     let {name, id} = list
-    listsElement.innerHTML += `<div class="tasks_list" id="${id + 'list_id'}"><h2>${name}</h2></div>`
+    listsElement.innerHTML += `<div class="tasks_list" id="${id + 'list_id'}"><h2>${name}<img class="trash" align="right" title="Видалити список"src="icons/trash21.png" onclick="deleteList(${id})"></h2></div>`
     listsBar.innerHTML += `<div class="side_list" id="side_list${id}">${name}</div>`
-    select.innerHTML += `<option>${name}</option>`
+    select.innerHTML += `<option id="${'op' + id}">${name}</option>`
     lists_map.set(name, id)
 }
 
 function appendTask(task) {
     // console.log(task)
     let {done, name, description, duedate, list_id, id} = task
-    console.log(done, name, description, duedate, list_id, id)
+    // console.log(done, name, description, duedate, list_id, id)
     const tasksElement = document.getElementById((list_id !== null ? list_id : 0) + 'list_id')
     // console.log(tasksElement)
+    duedate = new Date(duedate)
+    console.log(duedate, new Date(null))
     let hr_color = ''
     if (done) {
         hr_color = '#58AC83'
-    } else if (today > duedate && done === false && duedate !== null) {
+    } else if (today > duedate && done === false && (duedate - new Date(null)) !== 0) {
         hr_color = '#E63241'
     } else {
         hr_color = '#D9D9D9'
     }
     let h4_color =''
-    if (today > duedate && done === false && duedate !== null) {
+    if (today > duedate && done === false  && (duedate - new Date(null)) !== 0) {
         h4_color = '#E63241'
     } else {
         h4_color = '#878787'
@@ -54,9 +57,8 @@ function appendTask(task) {
         checked = 'checked'
         status = 'done'
     }
-    if (duedate === null) {
-        duedate = ''
-    } else duedate = new Date(duedate).toLocaleDateString()
+    // console.log(duedate - new Date(null))
+    (duedate - new Date(null)) === 0 ? duedate = '' : duedate = duedate.toLocaleDateString('en-GB')
     tasksElement.innerHTML += `<div class="task ${status}" id="${id}">
             <hr color="${hr_color}">
             <img class="trash" align="right" title="Видалити завдання"src="icons/trash21.png" onclick="deleteTask(${id})">
@@ -69,18 +71,6 @@ function appendTask(task) {
             <p>${description}</p>
         </div>`
 }
-
-// function deleteTask (id) {
-//     let task = document.getElementById(id.toString())
-//     task.remove()
-//     let arr = []
-//     for (item of tasks) {
-//         if (item.id === id) {
-//             console.log('remove: ', id);
-//         } else {arr.push(item)}
-//     }
-//     tasks = arr
-// }
 
 function changeDone (id) {
     let status = false
@@ -100,6 +90,13 @@ function closeAddTaskForm () {
     taskForm.reset()
 }
 
+const listForm = document.forms['list']
+
+function closeAddListForm () {
+    addListFormElement.classList.toggle("hide_list_form")
+    listForm.reset()
+}
+
 taskForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(taskForm);
@@ -111,6 +108,15 @@ taskForm.addEventListener('submit', (event) => {
     // console.log(task);
     createTask(task)
     .then(closeAddTaskForm())
+})
+
+listForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const formData = new FormData(listForm);
+    const list = Object.fromEntries(formData.entries())
+    console.log(list);
+    createList(list)
+    .then(closeAddListForm())
 })
 
 const taskEndpoint = 'http://localhost:8080/api/task'
@@ -127,6 +133,23 @@ function createTask(task) {
     .then(task => {
         console.log(task[0])
         appendTask(task[0])
+    })
+}
+
+const listEndpoint = 'http://localhost:8080/api/list'
+
+function createList(list) {
+    return fetch(listEndpoint, {
+        method: 'POST', 
+        headers:  {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(list)
+    })
+    .then(response => response.json())
+    .then(list => {
+        console.log(list[0])
+        appendList(list[0])
     })
 }
 
@@ -158,6 +181,19 @@ function deleteTask(id) {
     .then(task => {
         document.getElementById(id.toString()).remove()
         // console.log(task[0])
+    })
+}
+
+function deleteList(id) {
+    return fetch(listEndpoint + '/' + id, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(list => {
+        document.getElementById(id + 'list_id').remove()
+        document.getElementById('side_list' + id).remove()
+        document.getElementById('op' + id).remove()
+        console.log(list[0])
     })
 }
 
